@@ -2,49 +2,38 @@ package agents;
 
 import jade.core.Agent;
 import jade.core.AID;
-
 import jade.lang.acl.ACLMessage;
-
 import jade.core.behaviours.OneShotBehaviour;
 
 public class PatientAgent extends Agent {
 
     @Override
     protected void setup() {
+        System.out.println("Patient Agent Started");
 
-        System.out.println(
-                "Patient Agent Started"
-        );
+        addBehaviour(new OneShotBehaviour() {
+            @Override
+            public void action() {
 
-        addBehaviour(
-                new OneShotBehaviour() {
+                // ── Récupérer les arguments dynamiques
+                Object[] args  = getArguments();
+                String nom     = (args != null && args.length > 0) ? (String) args[0] : "Patient";
+                String consult = (args != null && args.length > 1) ? (String) args[1] : "Générale";
+                String prio    = (args != null && args.length > 2) ? (String) args[2] : "NORMAL";
 
-                    @Override
-                    public void action() {
+                String content = "Nom:" + nom +
+                        " | Consultation:" + consult +
+                        " | Priorité:" + prio;
 
-                        ACLMessage msg =
-                                new ACLMessage(
-                                        ACLMessage.REQUEST
-                                );
+                System.out.println("Patient envoie : " + content);
 
-                        msg.addReceiver(
-                                new AID(
-                                        "RDV",
-                                        AID.ISLOCALNAME
-                                )
-                        );
+                ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+                msg.addReceiver(new AID("RDV", AID.ISLOCALNAME));
+                msg.setContent(content);
+                send(msg);
 
-                        msg.setContent(
-                                "Nom:Ayoub | Consultation:Cardiologie | Priorité:CRITIQUE"
-                        );
-
-                        send(msg);
-
-                        System.out.println(
-                                "Demande médicale envoyée"
-                        );
-                    }
-                }
-        );
+                System.out.println("Demande médicale envoyée au RDV Agent");
+            }
+        });
     }
 }
