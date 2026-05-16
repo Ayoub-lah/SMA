@@ -49,6 +49,22 @@ public class Main {
             pharmacy.start();
             admin.start();
 
+            // Dans main(), après le démarrage des agents, ajoute :
+            System.out.println("\n");
+            System.out.println("╔══════════════════════════════════════════════════════╗");
+            System.out.println("║          HospitalSMA — JADE Multi-Agent System       ║");
+            System.out.println("║          FST Tanger — SIT & Big Data 2025/2026       ║");
+            System.out.println("╠══════════════════════════════════════════════════════╣");
+            System.out.println("║  ✓ EmergencyAgent   démarré                          ║");
+            System.out.println("║  ✓ DoctorAgent      démarré                          ║");
+            System.out.println("║  ✓ RDVAgent         démarré                          ║");
+            System.out.println("║  ✓ PharmacyAgent    démarré                          ║");
+            System.out.println("║  ✓ AdminAgent       démarré                          ║");
+            System.out.println("╠══════════════════════════════════════════════════════╣");
+            System.out.println("║  STATUS : Système prêt — En attente de patients...   ║");
+            System.out.println("╚══════════════════════════════════════════════════════╝");
+            System.out.println();
+
             DBConnection.connect();
 
             // Patient par défaut au démarrage

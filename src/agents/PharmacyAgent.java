@@ -1,7 +1,6 @@
 package agents;
 
 import jade.core.Agent;
-import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.core.behaviours.CyclicBehaviour;
 
@@ -9,36 +8,39 @@ public class PharmacyAgent extends Agent {
 
     @Override
     protected void setup() {
-        System.out.println("Pharmacy Agent Started");
-
         addBehaviour(new CyclicBehaviour() {
             @Override
             public void action() {
                 ACLMessage msg = receive();
-
                 if (msg != null) {
                     String content = msg.getContent();
-                    System.out.println("Ordonnance reçue : " + content);
 
-                    // Parser médicament
+                    String nom        = "Patient";
                     String medicament = "Paracétamol 1000mg";
-                    String[] parts = content.split("\\|");
-                    for (String part : parts) {
+
+                    for (String part : content.split("\\|")) {
                         part = part.trim();
-                        if (part.startsWith("Médicament:"))
+                        if (part.startsWith("Nom:"))
+                            nom = part.substring(4).trim();
+                        else if (part.startsWith("Médicament:"))
                             medicament = part.substring(11).trim();
                     }
 
-                    System.out.println("Préparation : " + medicament);
-                    System.out.println("✓ Médicament prêt");
-
-                    // Transmettre TOUT le contenu à Admin
-                    ACLMessage adminMsg = new ACLMessage(ACLMessage.INFORM);
-                    adminMsg.addReceiver(new AID("Admin", AID.ISLOCALNAME));
-                    adminMsg.setContent(content); // ← contenu complet
-                    send(adminMsg);
-
-                    System.out.println("Dossier transmis à Admin");
+                    System.out.println();
+                    System.out.println(
+                            "┌─────────────────────────────────────────────────────┐");
+                    System.out.println(
+                            "│  PharmacyAgent — Préparation Médicaments            │");
+                    System.out.println(
+                            "├─────────────────────────────────────────────────────┤");
+                    System.out.printf(
+                            "│  Patient     : %-37s│%n", nom);
+                    System.out.printf(
+                            "│  Médicament  : %-37s│%n", medicament);
+                    System.out.println(
+                            "│  ✓ Médicament préparé et prêt                       │");
+                    System.out.println(
+                            "└─────────────────────────────────────────────────────┘");
 
                 } else {
                     block();
